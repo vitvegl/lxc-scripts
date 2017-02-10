@@ -4,6 +4,7 @@ export DEBIAN_FRONTEND='noninteractive'
 
 packages=(
   locales-all
+  software-properties-common
   pv
   sshfs
   dialog
@@ -20,6 +21,9 @@ packages=(
   lsof
   strace
   nmap
+  tmux
+  git
+  rake
   openssh-server
 )
 

@@ -59,6 +59,32 @@ def __lxc_ssh_key_copying container
   end
 end
 
+def __lxc_start container
+  raise TypeError unless container.is_a? String
+  system "lxc-start -n #{container}"
+end
+
+def __lxc_stop container
+  raise TypeError unless container.is_a? String
+  system "lxc-stop -n #{container}"
+end
+
+def __lxc_fix_perms container
+  raise TypeError unless container.is_a? String
+  IO.popen("lxc-attach -n #{container}", "a+") do |pipe|
+    pipe.puts("chown -R ubuntu: #{SSHDIR}")
+    pipe.puts("chmod -R go-rwx #{SSHDIR}")
+  end
+end
+
+def __lxc_post_install container
+  raise TypeError unless container.is_a? String
+  IO.popen("lxc-attach -n #{container}", "a+") do |pipe|
+    pipe.puts(". ./root/setup.sh")
+    puts pipe.readlines
+  end
+end
+
 def run
   if @create.nil? or @create == false
     __lxc_script_copying @container
@@ -66,6 +92,10 @@ def run
     __lxc_create_container @container
     __lxc_script_copying @container
     __lxc_ssh_key_copying @container if @key == true
+    __lxc_start @container
+    __lxc_fix_perms @container
+    __lxc_post_install @container
+    __lxc_stop @container
   end
 end
 

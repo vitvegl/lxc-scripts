@@ -25,6 +25,8 @@ packages=(
   git
   rake
   openssh-server
+  dnsutils
+  goaccess
 )
 
 env_fix()

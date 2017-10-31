@@ -27,6 +27,8 @@ packages=(
   openssh-server
   dnsutils
   goaccess
+  zip
+  unzip
 )
 
 env_fix()
